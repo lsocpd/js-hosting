@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Function to safely replace text content
+    // Function to safely replace text content on the parent page
     const replaceText = () => {
-        const originalText = document.querySelector('#viewer > main > div:nth-child(2) > div > div:nth-child(2) > form > div > div.form-text');
+        const originalText = window.parent.document.querySelector('#viewer > main > div:nth-child(2) > div > div:nth-child(2) > form > div > div.form-text');
 
         // Ensure the target element exists and has text content
         if (originalText && originalText.textContent.trim().length > 0) {
