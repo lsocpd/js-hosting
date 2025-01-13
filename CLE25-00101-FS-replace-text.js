@@ -3,31 +3,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const replaceText = () => {
         const originalText = document.querySelector('#viewer > main > div:nth-child(2) > div > div:nth-child(2) > form > div > div.form-text');
 
-        // Ensure the target element exists before proceeding
-        if (originalText) {
+        // Ensure the target element exists and has text content
+        if (originalText && originalText.textContent.trim().length > 0) {
             originalText.textContent = 'Answers to submitted questions will be distributed to registrants via email after the program.'; 
 
             // Make sure the replacement text is accessible and visible to screen readers
             originalText.style.display = 'block';
             originalText.setAttribute('aria-hidden', 'true');
         } else {
-            console.warn('Target element not found.');
+            console.warn('Target element not found or no text to replace.');
         }
     };
 
-    // Create a MutationObserver to watch for changes in the DOM
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.addedNodes.length) {
-                const targetNode = document.querySelector('#viewer > main > div:nth-child(2) > div > div:nth-child(2) > form > div > div.form-text');
-                if (targetNode) {
-                    replaceText(); // Perform the replacement
-                    observer.disconnect(); // Stop observing once the element is found and text is replaced
-                }
-            }
-        });
-    });
-
-    // Start observing changes in the body
-    observer.observe(document.body, { childList: true, subtree: true });
+    // Call the function once the DOM is loaded
+    replaceText();
 });
