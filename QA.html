@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="module">
+      (function () {
+        const SELECTOR = "#control main .card-header.striped > div:first-child > strong";
+        const TARGET_TEXT = "Question";
+        const setText = (el) => {
+          if (el && el.textContent !== TARGET_TEXT) el.textContent = TARGET_TEXT;
+        };
+        const updateAll = () => {
+          const nodes = document.querySelectorAll(SELECTOR);
+          nodes.forEach(setText);
+        };
+        const startObserver = () => {
+          const container = document.querySelector("#control");
+          if (!container) return;
+          const observer = new MutationObserver((mutations) => {
+            for (const m of mutations) {
+              if (m.type === "attributes" && m.target instanceof Element) {
+                if (m.target.matches(SELECTOR)) setText(m.target);
+              }
+              m.addedNodes.forEach((node) => {
+                if (!(node instanceof Element)) return;
+                if (node.matches?.(SELECTOR)) setText(node);
+                node.querySelectorAll?.(SELECTOR).forEach(setText);
+              });
+            }
+          });
+          observer.observe(container, {
+            childList: true,
+            subtree: true,
+            attributes: true
+          });
+          updateAll();
+        };
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", startObserver);
+        } else {
+          startObserver();
+        }
+      })();
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
